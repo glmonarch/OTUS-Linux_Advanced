@@ -1,0 +1,35 @@
+---
+- name: Provision NGINX to newly created VM/CentOS7 by Terraform
+  hosts: all
+  remote_user: adminroot
+  become: true
+
+  tasks:
+    - name: Install EPEL repo
+      yum:
+        name: epel-release
+        state: present
+ 
+    - name: Install NGINX
+      yum:
+        name: nginx
+        state: latest
+
+    - name: Rename default index.html
+      command:
+        mv /usr/share/nginx/html/index.html /usr/share/nginx/html/index.html.orig
+
+    - name: Create custom index.html page for NGINX
+      copy:
+        dest: "/usr/share/nginx/html/index.html"
+        content: |
+          <html>
+          <head>
+          Hello! This is a first LAB in Otus Linux Advanced Course! 
+          </head>
+          </html>
+
+    - name: Start NGINX
+      service:
+        name: nginx
+        state: started

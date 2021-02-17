@@ -1,0 +1,13 @@
+---
+- name: 
+  hosts: iscsi
+  become: true
+  tasks:
+    - name: Install VIM
+      yum:
+        name: vim
+        state: present
+
+
+
+      
