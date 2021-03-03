@@ -1,0 +1,15 @@
+- hosts: cluster
+  roles:
+    - { role: 'OndrejHome.iscsiadm' }
+
+- hosts: iscsi
+  roles:
+    - { role: 'OndrejHome.targetcli' }
+  vars:
+    iscsi_targets:
+      - wwn: 'iqn.2021-02.com.redhat:target01'
+        disks:
+          - path: '/dev/sdb'
+            name: 'disk1'
+            type: 'block'
+        initiators: "[ {% for host in groups['cluster'] %} '{{ hostvars[host][\"iscsi_initiator_name\"] }}', {% endfor %} ]"

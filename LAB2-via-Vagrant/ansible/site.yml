@@ -1,0 +1,77 @@
+- hosts: cluster
+  become: true
+  tags: iscsiclient
+  roles:
+    - { role: 'OndrejHome.iscsiadm' }
+
+- hosts: iscsi
+  become: true
+  tags: iscsitarget
+  roles:
+    - { role: 'OndrejHome.targetcli' }
+  vars:
+    iscsi_targets:
+      - wwn: 'iqn.2021-02.com.redhat:target01'
+        disks:
+          - path: '/dev/sdb'
+            name: 'disk01'
+            type: 'block'
+        initiators: "[ {% for host in groups['cluster'] %} '{{ hostvars[host][\"iscsi_initiator_name\"] }}', {% endfor %} ]"
+
+- name: Connect cluster nodes to iSCSI target
+  become: true
+  hosts: cluster
+  tags: iscsiclient
+  tasks:
+    - name: Discover iSCSI target
+      shell: |
+        iscsiadm -m discovery -t st -p 192.168.1.10
+        iscsiadm -m discovery -t st -p 192.168.2.10
+        iscsiadm -m node -l -T iqn.2021-02.com.redhat:target01
+    - name: Start iSCSI initiators on clients
+      service:
+        name: iscsid
+        state: started
+
+- name: Basic hosts configuration
+  become: true
+  hosts: cluster
+  tags: pacemaker
+  roles:
+    - { role: 'Basic_hosts_config'}
+
+- name: Install Pacemaker
+  become: true
+  hosts: cluster
+  tags: pacemaker
+  roles:
+    - { role: 'Pacemaker_install' }
+
+- name: Configure Pacemaker
+  become: true
+  hosts: node1
+  tags: pacemaker
+  roles:
+    - { role: 'Pacemaker_configure' }
+
+- name: Configure Multipath
+  become: true
+  hosts: cluster
+  tags: cluster
+  roles:
+    - { role: 'Multipath_configure' }
+
+- name: Install GFS2 and cLVM software
+  become: true
+  hosts: cluster
+  tags: cluster
+  roles:
+    - { role: 'GFS2_setup_all' }
+
+- name: Configure GFS2 in cluster mode
+  become: true
+  hosts: node1
+  tags: cluster
+  roles:
+    - { role: 'GFS2_setup_single' }
+  

@@ -1,0 +1,13 @@
+- name: Install GFS2 and cLVM software
+  yum:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - gfs2-utils
+    - lvm2-cluster
+
+- name: Configuring cLVM
+  command: "{{ item }}"
+  with_items:
+    - "lvmconf --enable-cluster" 

@@ -1,0 +1,5 @@
+- name: Creating Multipath config file
+  command: "{{ item }}"
+  with_items:
+    - "/sbin/mpathconf --enable"
+  notify: "Restart multipathd"
