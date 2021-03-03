@@ -18,5 +18,5 @@
 2. cd OTUS-Linux_Advanced/LAB2-via-Vagrant
 3. vagrant up
 4. vagrant ssh ansible
-5. sudo su && su - ansible && cd ~
+5. sudo su ansible && cd ~
 6. ansible-playbook -K site.yml (become password: "password").
