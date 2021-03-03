@@ -56,12 +56,12 @@ nodes = {
     :box_name => "centos/7",
     :ip_addr => '192.168.1.100',
     :ip_addr_secondary => '192.168.2.100',
-    :disks => {
-      :satan1 => {
-        :dfile => './sata55.vdi',
-        :size => 32,
-        :port => 1
-      },
+          :disks => {
+            :satan1 => {
+              :dfile => './sata55.vdi',
+                          :size => 32,
+                          :port => 1
+           },
     }
   },  	
 	
