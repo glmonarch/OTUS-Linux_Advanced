@@ -17,4 +17,4 @@
 3. vagrant up
 4. vagrant ssh ansible
 5. sudo su && su - ansible && cd ~
-6. ansible-playbook -K site.yml (become pasword: "password").
+6. ansible-playbook -K site.yml (become password: "password").
