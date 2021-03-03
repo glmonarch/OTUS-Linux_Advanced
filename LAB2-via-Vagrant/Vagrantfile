@@ -174,8 +174,8 @@ Vagrant.configure(2) do |config|
        cp -r /vagrant/ansible /home/ansible && 
        chown -R ansible:ansible /home/ansible/ansible &&
        cd /home/ansible/ansible &&
-       sudo -u ansible ansible all -m ping #&&     
-      #sudo -u ansible ansible-playbook -K site.yml
+       sudo -u ansible ansible all -m ping
+      
 
          SHELL
 
